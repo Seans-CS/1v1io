@@ -1,0 +1,78 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: linear-gradient(to bottom right, purple 20%, blue);
+}
+
+.background-container {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -190px;
+}
+
+.text p {
+    font-weight: bold;
+    color: white;
+    font-size: 100px;
+    animation: pulse 2s infinite;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.buttons :hover{
+    animation: pulse 2s infinite;
+}
+#create{
+    background-color: rgba(245, 245, 245, 0.5);
+    border-radius: 10px;
+    margin-right: 50px;
+    height: 5vh;
+    width: 10vh;
+    border: none;
+    font-size: 20px;
+}
+
+#join{
+    background-color: rgba(245, 245, 245, 0.5);
+    border-radius: 10px;
+    height: 5vh;
+    width: 10vh;
+    margin-left: 50px;
+    border: none;
+    font-size: 20px;
+}
+
+/* .Enter-Game-Code-Area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+    width: 100vh;
+    margin: auto;
+    border: none;
+} */
+
+
+
+
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
