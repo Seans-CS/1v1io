@@ -15,6 +15,7 @@ html, body {
 }
 
 .text p {
+    position: sticky;
     font-weight: bold;
     color: white;
     font-size: 100px;
@@ -36,6 +37,7 @@ html, body {
 }
 
 #create {
+    position: sticky;
     background-color: rgba(245, 245, 245, 0.5);
     border-radius: 10px;
     height: 5vh;
@@ -45,6 +47,7 @@ html, body {
 }
 
 #join {
+    position:sticky;
     background-color: rgba(245, 245, 245, 0.5);
     border-radius: 10px;
     height: 5vh;
@@ -64,4 +67,16 @@ html, body {
     100% {
         transform: scale(1);
     }
+}
+
+
+.version{
+    color: wheat;
+    display:inline-block;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    z-index: 999;
+    
 }
