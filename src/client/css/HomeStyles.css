@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    background: linear-gradient(to bottom right, purple 20%, blue);
+    background-image: linear-gradient(to right top, #b12bbe, #9f1dc8, #8714d3, #6414df, #121ceb);
 }
 
 .background-container {
@@ -49,21 +49,6 @@ html, body {
     border: none;
     font-size: 20px;
 }
-
-/* .Enter-Game-Code-Area{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 10vh;
-    width: 100vh;
-    margin: auto;
-    border: none;
-} */
-
-
-
-
-
 
 @keyframes pulse {
     0% {
