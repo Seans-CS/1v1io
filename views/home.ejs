@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1v1.io</title>
-    <link rel="stylesheet" href="styles\HomeStyles.css">
+    <link rel="stylesheet" href="styles/HomeStyles.css">
     <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
@@ -15,19 +15,20 @@
     </div>
     <div class="buttons">
         <div class="button-container">
-          <button onclick="navigate('/lobby')" id="create">Create</button>
+            <button onclick="navigate('/lobby')" id="create">Create</button>
         </div>
         <div class="button-container">
-            <button onclick="navigate('/game')" id="join">Join</button></a>
+            <button id="join">Join</button>
         </div>
     </div>
 
-    <p class = "version">Version 0.1</p>
+    <div id="joinInput" style="display: none;">
+        <input type="text" id="joinCode" placeholder="Enter code">
+        <button id="joinBtn">➜</button>
+    </div>
 
-    <script>
-      function navigate(url) {
-        window.location.href = url;
-      }
-    </script>
+    <p class="version">Version 0.1</p>
+
+    <script src="/scripts/joinLobbyButton.js"></script>
 </body>
 </html>
