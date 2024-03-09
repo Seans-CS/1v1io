@@ -7,12 +7,19 @@
     <link rel="stylesheet" href="styles/HomeStyles.css">
     <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
+
 <body>
+
     <div class="background-container">
         <div class="text">
             <p>1v1.io</p>
         </div>
     </div>
+
+    <div id="nameInput">
+        <input type="text" id="user-name" placeholder="Enter name">
+    </div>
+
     <div class="buttons">
         <div class="button-container">
             <button onclick="navigate('/lobby')" id="create">Create</button>
@@ -21,6 +28,9 @@
             <button id="join">Join</button>
         </div>
         
+    </div>
+    <div class="button-container">
+        <button onclick="navigate('/game')">go to game room</button>
     </div>
 
     <div id="joinInput" style="display: none;">
@@ -32,5 +42,6 @@
 
     <script src="/scripts/joinLobbyButton.js"></script>
     <script src="/scripts/public.js"></script>
+    
 </body>
 </html>

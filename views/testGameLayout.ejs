@@ -13,7 +13,7 @@
     <div class="background-container">
         <div class="Header">
             <p>1v1.io 
-                <p class="lobby-Code"></p>
+                <p class="lobby-Code">lobby code</p>
                 <button onclick="navigate('/home')" id="home">Home</button></a>
             </p>
         </div>
@@ -42,14 +42,20 @@
     
     <div class="Container">
         <div class="ChatArea">
-            <p>Chat Area</p>
+            <div class="ChatMessages">
+                <!-- Existing chat messages here -->
+            </div>
+            <textarea class="ChatInput" placeholder="Type your message here..."></textarea>
         </div>
         <div class="GameArea">
-            Game Area
+            <div class="grid">
+                <!-- Image elements will be dynamically added here -->
+            </div>
         </div>
     </div>
     
     <script src="/scripts/public.js"></script>
+    <script src="/scripts/gamesGrid.js"></script>
 
 </body>
 </html>

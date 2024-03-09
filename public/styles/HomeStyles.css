@@ -37,6 +37,7 @@ html, body {
 }
 
 #create {
+    color: #ffffff;
     position: sticky;
     background-color: rgba(245, 245, 245, 0.5);
     border-radius: 10px;
@@ -47,6 +48,7 @@ html, body {
 }
 
 #join {
+    color: #ffffff;
     position:sticky;
     background-color: rgba(245, 245, 245, 0.5);
     border-radius: 10px;
@@ -87,6 +89,8 @@ input[type="text"]#joinCode::placeholder {
     
     color: white;
 }
+
+
 #joinInput button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -97,10 +101,52 @@ input[type="text"]#joinCode::placeholder {
     transition: background-color 0.3s;
 }
 
+
 #joinInput button:hover {
     background-color: #0056b3;
 }
 
+#user-name{
+    padding: 100px;
+}
+
+
+#nameInput {
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+#nameInput input[type="text"] {
+    border:none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 150px;
+    margin-right: 5px;
+    color: aliceblue;
+    background-color:rgba(245, 245, 245, 0.5);
+}
+
+input[type="text"]#user-name::placeholder {
+    color: white;
+}
+
+#nameInput button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+#nameInput button:hover {
+    background-color: #0056b3;
+}
 .version{
     color: wheat;
     display:inline-block;
