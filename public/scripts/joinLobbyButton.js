@@ -10,13 +10,10 @@ function showJoinInput() {
 function joinLobby() {
     var code = document.getElementById('joinCode').value;
     if (code.trim() !== '') {
-        window.location.href = '/lobby?code=' + encodeURIComponent(code);
+        window.location.href = '/game?code=' + encodeURIComponent(code);
     } else {
         alert('Please enter a code');
     }
 }
 
 
-function navigate(url) {
-    window.location.href = url;
-}

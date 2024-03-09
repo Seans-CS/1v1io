@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1v1.io</title>
     <link rel="stylesheet" href="styles/LobbyStyles.css">
-
-
 </head>
 
 <body>
@@ -14,17 +12,38 @@
         <div class="Header">
             <div class="header-content">
                 <p>1v1.io</p>
-                <span class="lobby-code">Lobby Code: ABC123</span>
-                <button onclick="navigate('/home')" id="home">Home</button></a>
+                <br>
+                <button onclick="navigate('/home')" id="home">Home</button>
             </div>
         </div>
     </div>
 
+    <div class="sidebar">
+        <div class="lobby-code">Lobby Code: ABC123</div>
+        
+        <div class="user-card">
+            <div class="user-avatar"></div>
+            <div class="user-details">
+                <div class="user-name">User 1</div>
+            </div>
+        </div>
+        <div class="user-card">
+            <div class="user-avatar"></div>
+            <div class="user-details">
+                <div class="user-name">User 2</div>
+            </div>
+        </div>
+        
+        <div class="settings-area">
+            <div class="settings-box">Settings</div>
+        </div>
+    </div>
+    
     
 
-    <div></div>
-    <script src="/scripts/public.js"></script>
+    <div class="content-area">
+    </div>
 
+    <script src="/scripts/public.js"></script>
 </body>
 </html>
-
