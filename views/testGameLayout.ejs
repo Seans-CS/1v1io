@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1v1.io</title>
     <link rel="stylesheet" href="styles/TestStyles.css">
-
-
+    <script src="/socket.io/socket.io.js"></script>
 </head>
-
 <body>
     <div class="background-container">
         <div class="Header">
             <p>1v1.io 
-                <p class="lobby-Code">lobby code</p>
-                <button onclick="navigate('/home')" id="home">Home</button></a>
+                <span class="lobby-Code" id="lobbyCode">lobby code</span>
+                <button onclick="navigate('/home')" id="home">Home</button>
             </p>
         </div>
     </div>
@@ -42,21 +40,20 @@
     
     <div class="Container">
         <div class="ChatArea">
-            <div class="ChatMessages">
-                <!-- Existing chat messages here -->
-            </div>
-            <textarea class="ChatInput" placeholder="Type your message here..."></textarea>
+            <div class="ChatMessages"></div>
+            <textarea id="ChatInput" placeholder="Type your message..."></textarea>
+            <button id="sendButton">Send</button>
         </div>
+       
         <div class="GameArea">
             <div class="grid">
                 <!-- Image elements will be dynamically added here -->
             </div>
         </div>
     </div>
-    
+
+    <script src="/scripts/chatSystem.js"></script>
     <script src="/scripts/public.js"></script>
     <script src="/scripts/gamesGrid.js"></script>
-
 </body>
 </html>
-
