@@ -1,38 +1,44 @@
-const socket = io();
+document.addEventListener('DOMContentLoaded', function() {
+    const lobbyCode = window.location.search.split('=')[1]; // Extract the lobby code from the URL
+    const socket = io(); // Connect to the server
 
-function sendMessage() {
-    const message = document.getElementById('ChatInput').value;
-    const userName = "User"; // Replace "User" with the actual user's name or identifier
-    socket.emit('chat message', { userName, message });
-    document.getElementById('ChatInput').value = '';
-}
+    // Notify the server that the user has joined the lobby
+    socket.emit('join lobby', lobbyCode);
 
-socket.on('chat message', (data) => {
-    const { userName, message } = data;
+    // Select chat-related DOM elements
     const chatMessages = document.querySelector('.ChatMessages');
-    const messageElement = document.createElement('div');
-    messageElement.innerText = `[${userName}] ${message}`;
-    chatMessages.appendChild(messageElement);
-});
-
-document.addEventListener('DOMContentLoaded', function() {
     const chatInput = document.getElementById('ChatInput');
-    if (chatInput) {
-        chatInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    } else {
-        console.error('Element with ID "ChatInput" not found.');
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
     const sendButton = document.getElementById('sendButton');
-    if (sendButton) {
-        sendButton.addEventListener('click', sendMessage);
-    } else {
-        console.error('Element with ID "sendButton" not found.');
+
+    // Function to append a new message to the chat area
+    function appendMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
     }
+
+    // Event listener for the send button click
+    sendButton.addEventListener('click', function() {
+        const message = chatInput.value.trim();
+        if (message !== '') {
+            socket.emit('chat message', { userName: 'User', message }); // Emit the message to the server
+            chatInput.value = ''; // Clear the input field
+        }
+    });
+
+    // Event listener for receiving messages from the server
+    socket.on('chat message', function(data) {
+        const message = `${data.userName}: ${data.message}`;
+        appendMessage(message);
+    });
+
+    // Event listener for handling WebSocket connection errors
+    socket.on('connect_error', function(error) {
+        console.error('WebSocket connection error:', error);
+    });
+
+    // Event listener for handling WebSocket disconnections
+    socket.on('disconnect', function(reason) {
+        console.log('WebSocket disconnected:', reason);
+    });
 });

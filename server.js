@@ -80,21 +80,28 @@ app.get('/game', (req, res) => {
   res.render('testGameLayout');
 });
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-
-  socket.on('chat message', (data) => {
-    const { userName, message } = data;
-    io.emit('chat message', { userName, message });
-  });
-});
-
-
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// WebSocket connection handling
+io.on('connection', (socket) => {
+  console.log('A user connected to the chat');
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected from the chat');
+  });
+
+  socket.on('join lobby', (lobbyCode) => {
+    socket.join(lobbyCode); // Join the room identified by the lobbyCode
+    console.log(`User joined lobby: ${lobbyCode}`);
+
+    socket.on('chat message', (data) => {
+      const { userName, message } = data;
+      io.to(lobbyCode).emit('chat message', { userName, message }); // Broadcast the message to all clients in the same lobby
+    });
+  });
+});
+
+
