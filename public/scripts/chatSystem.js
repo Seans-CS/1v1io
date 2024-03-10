@@ -21,15 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
     sendButton.addEventListener('click', function() {
         const message = chatInput.value.trim();
         if (message !== '') {
-            socket.emit('chat message', { userName: 'User', message }); // Emit the message to the server
+            socket.emit('chat message', { message }); // Emit the message to the server without specifying the user's name
             chatInput.value = ''; // Clear the input field
         }
     });
 
     // Event listener for receiving messages from the server
     socket.on('chat message', function(data) {
-        const message = `${data.userName}: ${data.message}`;
-        appendMessage(message);
+        const { userId, message } = data;
+        const messageWithUserId = `${userId}: ${message}`; // Concatenate the user's ID with the message
+        appendMessage(messageWithUserId);
     });
 
     // Event listener for handling WebSocket connection errors

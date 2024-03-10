@@ -87,21 +87,22 @@ server.listen(PORT, () => {
 
 // WebSocket connection handling
 io.on('connection', (socket) => {
-  console.log('A user connected to the chat');
+  console.log(`A user connected with ID: ${socket.id}`); // Log the user's Socket.IO ID
 
   socket.on('disconnect', () => {
-    console.log('User disconnected from the chat');
+    console.log(`User disconnected with ID: ${socket.id}`);
   });
 
   socket.on('join lobby', (lobbyCode) => {
     socket.join(lobbyCode); // Join the room identified by the lobbyCode
-    console.log(`User joined lobby: ${lobbyCode}`);
+    console.log(`User with ID ${socket.id} joined lobby: ${lobbyCode}`);
 
     socket.on('chat message', (data) => {
-      const { userName, message } = data;
-      io.to(lobbyCode).emit('chat message', { userName, message }); // Broadcast the message to all clients in the same lobby
+      const { message } = data;
+      io.to(lobbyCode).emit('chat message', { userId: socket.id, message }); // Broadcast the message along with the user's ID
     });
   });
 });
+
 
 
