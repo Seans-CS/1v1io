@@ -99,10 +99,11 @@ io.on('connection', (socket) => {
 
     socket.on('chat message', (data) => {
       const { message } = data;
-      io.to(lobbyCode).emit('chat message', { userId: socket.id, message }); // Broadcast the message along with the user's ID
+      io.to(lobbyCode).emit('chat message', { userId: socket.id, message }); // Broadcast the message along with the user's ID to users in the same lobby
     });
   });
 });
+
 
 
 
