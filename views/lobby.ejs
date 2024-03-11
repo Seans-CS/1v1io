@@ -17,11 +17,9 @@
         </div>
     </div>
 
-    
-
     <div class="sidebar">
         <div class="lobby-code">
-            <!--Display Lobby Code Here whith a buttion to let you auto copy the link to send to friend-->
+            <!-- Display Lobby Code Here with a button to let you auto-copy the link to send to a friend -->
         </div>
         
         <div class="user-card">
@@ -39,29 +37,32 @@
 
         <div class="Container">
             <div class="ChatArea">
-                <div class="ChatMessages"></div>
-                <textarea id="ChatInput" placeholder="Type your message..."></textarea>
-                <button id="sendButton">Send</button>
-            </div>
-           
-            <div class="GameArea">
-                <div class="grid">
-                    <!-- Image elements will be dynamically added here -->
+                <div class="ChatMessages" id="chatMessages">
+                    <!-- Chat messages will be dynamically added here -->
                 </div>
             </div>
         </div>
-        
-        <div class="settings-area">
-            <div class="settings-box">Settings</div>
+
+        <div class="ChatInputContainer" id="ChatInputContainer">
+            <label for="ChatInput" class="ClickableTextArea">
+                <textarea id="ChatInput" placeholder="Type your message..."></textarea>
+            </label>
+            <button id="sendButton">➤</button>
         </div>
     </div>
-    
-    
 
+    <div class="GameContainer">
+        <div class="GameArea">
+            <div class="grid">
+                <!-- Image elements will be dynamically added here -->
+            </div>
+        </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/scripts/chatSystem.js"></script>
     <script src="/scripts/public.js"></script> 
     <script src="/scripts/lobbyGenCode.js"></script> 
+    <script src="/scripts/gamesGrid.js"></script> 
 </body>
 </html>

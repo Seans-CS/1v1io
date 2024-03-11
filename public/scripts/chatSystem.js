@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to append a new message to the chat area
     function appendMessage(message) {
         const messageElement = document.createElement('div');
+        messageElement.setAttribute('id', 'ChatMessageId');
         messageElement.textContent = message;
         chatMessages.appendChild(messageElement);
     }

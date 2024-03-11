@@ -1,3 +1,4 @@
+
 html, body {
     font-family: Arial, Helvetica, sans-serif;
     height: 100%;
@@ -41,20 +42,111 @@ html, body {
 
 .sidebar {
     width: 20%;
-    height: 100%;
+    height: 50%;
     float: left;
     background-color: rgba(255, 255, 255, 0.2);
     padding: 20px;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+.Container {
+    border-top: 2px solid rgb(255, 255, 255);
+    padding-top: 10px;
+    margin-top: 75px;
+    flex-grow: 1;
+    overflow-y: auto;
+    position: relative;
+    max-height: calc(100% - 140px);
+}
+#ChatMessageId{
+    color: white;
+}
+.ChatMessages {
+    max-height: calc(100% - 50px);
+    padding-right: 10px;
+}
+.ChatArea {
+    max-height: calc(100% - 50px);
+    overflow:hidden;
+    padding-right: 10px;
 }
 
-.lobby-code {
-    margin-bottom: 20px;
-    font-weight: bold;
+.ChatArea::-webkit-scrollbar {
+    width: 8px;
 }
 
+.ChatArea::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.ChatArea::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+#ChatInput {
+    color: aliceblue;
+    width: 100%;
+    border: none;
+    resize: none;
+    background: transparent;
+    font-family: inherit;
+    padding-right: -5px;
+}
+
+#ChatInput::placeholder {
+    color: white;
+}
+#ChatInput:focus {
+    outline: none;
+}
+
+.ChatInputContainer {
+    border-top: 2px solid rgb(255, 255, 255);
+    padding-top: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.ClickableTextArea {
+    flex-grow: 1;
+    cursor: text;
+}
+
+.ClickableTextArea textarea::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ClickableTextArea textarea::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.ClickableTextArea textarea::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#sendButton {
+    background: none;
+    padding: none;
+    height: 50px;
+    border: none;
+    font-size: 30px;
+    color: white;
+    width: 70px;
+}
 .user-card {
+    width: 75%;
+    border-radius: 50px;
+    -webkit-box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.75);
+    box-shadow: 2px 3px 6px 0px rgba(0,0,0,0.75);
     display: flex;
     align-items: center;
     margin-bottom: 20px;
@@ -92,9 +184,41 @@ html, body {
     background-color: #ccc;
 }
 
-.content-area {
-    width: 80%;
-    height: 100%;
-    float: left;
-    background-color: rgba(255, 255, 255, 0.5);
+.GameContainer {
+    display: flex;
+    height: 75vh;
+}
+
+.GameArea {
+    width: 100%;
+    height: 100vh;
+    margin-right: 15%;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.GameArea .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+    grid-gap: 5%;
+    overflow: auto;
+}
+
+.GameArea .grid img {
+    width: 100%;
+    height: auto; 
+    max-width: 100%;
+}
+
+.GameArea .grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.GameArea .grid::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.GameArea .grid::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
