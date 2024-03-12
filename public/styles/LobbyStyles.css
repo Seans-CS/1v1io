@@ -61,14 +61,17 @@ html, body {
 }
 #ChatMessageId{
     color: white;
+    word-wrap: break-word;
 }
 .ChatMessages {
-    max-height: calc(100% - 50px);
     padding-right: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 .ChatArea {
     max-height: calc(100% - 50px);
-    overflow:hidden;
+    overflow-y: auto;
     padding-right: 10px;
 }
 
@@ -108,7 +111,7 @@ html, body {
     padding-top: 10px;
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 5;
     width: 100%;
     display: flex;
     align-items: center;
@@ -196,6 +199,11 @@ html, body {
     border-radius: 20px;
     padding: 20px;
 }
+.GameContainer{
+    border-left: 2px solid rgba(255, 255, 255, 0.212);
+    height: 100vh;
+    
+}
 
 .GameArea .grid {
     display: grid;
@@ -208,6 +216,11 @@ html, body {
     width: 100%;
     height: auto; 
     max-width: 100%;
+}
+
+.GameArea .grid img.grayed {
+    filter: grayscale(100%);
+    pointer-events: none; /* Prevent further clicks on grayed-out images */
 }
 
 .GameArea .grid::-webkit-scrollbar {
