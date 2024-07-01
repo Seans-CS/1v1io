@@ -15,8 +15,12 @@
         </div>
     </div>
 
+    <!-- Username Input Form -->
     <div id="nameInput">
-        <input type="text" id="user-name" placeholder="Enter name">
+        <form id="usernameForm">
+            <input type="text" id="user-name" placeholder="Enter name" required>
+            <button type="submit">Save Name</button>
+        </form>
     </div>
 
     <div class="buttons">
@@ -28,18 +32,21 @@
         </div>
     </div>
 
-    <div class="button-container">
-        <button onclick="navigate('/game')">Go to game room</button>
-    </div>
-
     <div id="joinInput" style="display: none;">
         <input type="text" id="joinCode" placeholder="Enter code">
         <button id="joinBtn">➜</button>
+    </div>
+
+    <div class="button-container">
+        <button onclick="navigate('/game')">Go to game room</button>
     </div>
 
     <p class="version">Version 0.1</p>
 
     <script src="/scripts/joinLobbyButton.js"></script>
     <script src="/scripts/public.js"></script>
+
+    <!-- Include the new script for handling username -->
+    <script src="/scripts/usernameHandler.js"></script>
 </body>
 </html>

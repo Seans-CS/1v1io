@@ -39,13 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for the send button click
     sendButton.addEventListener('click', sendMessage);
 
-    // Event listener for receiving messages from the server
-    socket.on('chat message', function(data) {
-        const { userId, message } = data;
-        const messageWithUserId = `${userId}: ${message}`; // Concatenate the user's ID with the message
-        prependMessage(messageWithUserId);
-    });
-
+   // Event listener for receiving messages from the server
+socket.on('chat message', function(data) {
+    const { userId, message } = data;
+    const username = localStorage.getItem('username'); // Retrieve the username from localStorage
+    const messageWithUsername = `${username}: ${message}`; // Concatenate the username with the message
+    prependMessage(messageWithUsername);
+});
     // Event listener for handling WebSocket connection errors
     socket.on('connect_error', function(error) {
         console.error('WebSocket connection error:', error);
