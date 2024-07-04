@@ -14,11 +14,7 @@ html, body {
     margin-bottom: -190px;
 }
 
-.text p {
-    position: sticky;
-    font-weight: bold;
-    color: white;
-    font-size: 100px;
+.text {
     animation: pulse 2s infinite;
 }
 
@@ -57,6 +53,7 @@ html, body {
     border: none;
     font-size: 20px;
 }
+
 
 @keyframes pulse {
     0% {

@@ -28,7 +28,7 @@ function createLobby() {
         console.log('Response from server:', data); // Log the response data for debugging
         if (data && data.lobbyCode) {
             // Redirect to the lobby page with the lobby code and username appended to the URL
-            window.location.href = `/lobby?code=${encodeURIComponent(data.lobbyCode)}}`;
+            window.location.href = `/lobby?code=${encodeURIComponent(data.lobbyCode)}`;
         } else {
             alert('Failed to create lobby. Invalid response from server.');
         }
