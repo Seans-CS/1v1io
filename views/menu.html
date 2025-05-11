@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1v1.io - Main Menu</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="menu.html" class="home-btn">🏠 Home</a>
+            <a href="profile.html" class="profile-icon">👤</a>
+        </nav>
+
+        <header>
+            <h1 class="title">1v1.io</h1>
+            <p class="subtitle">Battle your friends in epic 1v1 matches!</p>
+        </header>
+
+        <main>
+            <div class="player-setup">
+                <div class="input-group">
+                    <label for="playerName">Your Name</label>
+                    <input type="text" id="playerName" placeholder="Enter your name" maxlength="20">
+                </div>
+            </div>
+
+            <div class="menu-options">
+                <div class="menu-card">
+                    <h2>Create Match</h2>
+                    <p>Start a new match and invite friends to join your lobby</p>
+                    <button class="btn primary" onclick="createMatch()">Create Match</button>
+                </div>
+
+                <div class="menu-card">
+                    <h2>Join Match</h2>
+                    <p>Join an existing match using a lobby code from your friend</p>
+                    <div class="input-group">
+                        <input type="text" id="lobbyCode" placeholder="Enter lobby code" maxlength="6">
+                    </div>
+                    <button class="btn primary" onclick="joinMatch()">Join Match</button>
+                </div>
+            </div>
+
+            <div class="menu-footer">
+                <button class="btn" onclick="showHowToPlay()">How to Play</button>
+                <button class="btn" onclick="showLeaderboard()">Leaderboard</button>
+            </div>
+        </main>
+
+        <!-- How to Play Modal -->
+        <div id="howToPlayModal" class="modal hidden">
+            <div class="modal-content">
+                <h2>How to Play</h2>
+                <div class="modal-body">
+                    <h3>Getting Started</h3>
+                    <ol>
+                        <li>Enter your name in the input field</li>
+                        <li>Choose to either create a new match or join an existing one</li>
+                        <li>If creating a match, share the lobby code with your friend</li>
+                        <li>If joining a match, enter the lobby code from your friend</li>
+                    </ol>
+
+                    <h3>Game Rules</h3>
+                    <ol>
+                        <li>Select 5 games in your preferred order</li>
+                        <li>First player to win 3 games wins the match</li>
+                        <li>Each game is played in the order selected</li>
+                        <li>Games alternate between players</li>
+                    </ol>
+
+                    <h3>Available Games</h3>
+                    <ul>
+                        <li>Tic Tac Toe - Classic 3x3 grid game</li>
+                        <li>Snake - Navigate and grow your snake</li>
+                        <li>Pong - Classic paddle and ball game</li>
+                        <li>Memory - Test your memory with card matching</li>
+                        <li>Connect 4 - Strategic vertical line game</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="hideHowToPlay()">Close</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        let playerId = null;
+
+        // Socket event handlers
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+            // Don't show alert on initial disconnect
+            if (playerId) {
+                alert('Connection lost. Attempting to reconnect...');
+            }
+        });
+
+        socket.on('reconnect', () => {
+            console.log('Reconnected to server');
+            // Restore player state
+            const playerName = localStorage.getItem('playerName');
+            if (playerName) {
+                socket.emit('playerJoin', { playerName }, (response) => {
+                    if (response.error) {
+                        console.error('Reconnection error:', response.error);
+                        return;
+                    }
+                    playerId = response.playerId;
+                });
+            }
+        });
+
+        socket.on('lobbyExpired', () => {
+            alert('The lobby has expired. Please create a new one.');
+            location.href = 'menu.html';
+        });
+
+        socket.on('hostDisconnected', () => {
+            alert('The host has disconnected. Please create a new match.');
+            location.href = 'menu.html';
+        });
+
+        socket.on('opponentDisconnected', () => {
+            alert('The opponent has disconnected. Please create a new match.');
+            location.href = 'menu.html';
+        });
+
+        socket.on('playerJoined', ({ playerId: id }) => {
+            playerId = id;
+        });
+
+        socket.on('lobbyCreated', ({ lobbyCode }) => {
+            localStorage.setItem('lobbyCode', lobbyCode);
+            location.href = 'index.html?mode=create';
+        });
+
+        socket.on('error', ({ message }) => {
+            alert(message);
+        });
+
+        function showHowToPlay() {
+            document.getElementById('howToPlayModal').classList.remove('hidden');
+        }
+
+        function hideHowToPlay() {
+            document.getElementById('howToPlayModal').classList.add('hidden');
+        }
+
+        function showLeaderboard() {
+            // To be implemented
+            alert('Leaderboard coming soon!');
+        }
+
+        function createMatch() {
+            const playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            // Save player name first
+            localStorage.setItem('playerName', playerName);
+            
+            // Join as player first
+            socket.emit('playerJoin', { playerName }, (response) => {
+                if (response.error) {
+                    alert(response.error);
+                    return;
+                }
+                
+                playerId = response.playerId;
+                
+                // Create lobby after successful player join
+                socket.emit('createLobby', (response) => {
+                    if (response.error) {
+                        alert(response.error);
+                        return;
+                    }
+                    
+                    localStorage.setItem('lobbyCode', response.lobbyCode);
+                    location.href = 'index.html?mode=create';
+                });
+            });
+        }
+
+        function joinMatch() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const lobbyCode = document.getElementById('lobbyCode').value.trim().toUpperCase();
+            
+            if (!playerName) {
+                alert('Please enter your name');
+                return;
+            }
+            if (!lobbyCode) {
+                alert('Please enter a lobby code');
+                return;
+            }
+            
+            // Save player name first
+            localStorage.setItem('playerName', playerName);
+            
+            // Join as player first
+            socket.emit('playerJoin', { playerName }, (response) => {
+                if (response.error) {
+                    alert(response.error);
+                    return;
+                }
+                
+                playerId = response.playerId;
+                
+                // Join the lobby after successful player join
+                socket.emit('joinLobby', { lobbyCode }, (response) => {
+                    if (response.error) {
+                        alert(response.error);
+                        return;
+                    }
+                    
+                    localStorage.setItem('lobbyCode', lobbyCode);
+                    location.href = `index.html?mode=join&code=${lobbyCode}`;
+                });
+            });
+        }
+
+        // Load saved player name if exists
+        window.onload = function() {
+            const savedName = localStorage.getItem('playerName');
+            if (savedName) {
+                document.getElementById('playerName').value = savedName;
+            }
+        }
+    </script>
+</body>
+</html> 

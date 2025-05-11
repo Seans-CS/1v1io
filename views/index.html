@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1v1.io - Lobby</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="menu.html" class="home-btn">🏠 Home</a>
+            <a href="profile.html" class="profile-icon">👤</a>
+        </nav>
+
+        <header>
+            <h1 class="title">1v1.io</h1>
+            <p class="subtitle">Waiting for opponent...</p>
+        </header>
+
+        <main>
+            <div id="waitingRoom" class="waiting-room">
+                <div class="waiting-room-content">
+                    <div class="lobby-info">
+                        <h2>Lobby Code</h2>
+                        <div class="lobby-code-display"></div>
+                        <button class="btn copy-code" onclick="copyLobbyCode()">
+                            <span class="copy-icon">📋</span> Copy Code
+                        </button>
+                    </div>
+
+                    <div class="player-list">
+                        <div class="player host">
+                            <div class="player-avatar">👤</div>
+                            <div class="player-info">
+                                <span id="hostName" class="player-name">Host</span>
+                                <span id="hostStatus" class="player-status">Ready</span>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="player opponent">
+                            <div class="player-avatar">👤</div>
+                            <div class="player-info">
+                                <span id="opponentName" class="player-name">Waiting...</span>
+                                <span id="opponentStatus" class="player-status">Joining</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        let isHost = false;
+        let lobbyCode = '';
+        let playerId = null;
+
+        // Socket event handlers
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+            // Don't show alert on initial disconnect
+            if (playerId) {
+                alert('Connection lost. Attempting to reconnect...');
+            }
+        });
+
+        socket.on('reconnect', () => {
+            console.log('Reconnected to server');
+            // Restore player state
+            const playerName = localStorage.getItem('playerName');
+            if (playerName) {
+                socket.emit('playerJoin', { playerName }, (response) => {
+                    if (response.error) {
+                        console.error('Reconnection error:', response.error);
+                        return;
+                    }
+                    playerId = response.playerId;
+                });
+            }
+        });
+
+        socket.on('opponentJoined', ({ opponentName, opponentId, isHost }) => {
+            console.log('Opponent joined:', opponentName, opponentId, isHost);
+            updateLobbyUI(opponentName);
+        });
+
+        socket.on('lobbyState', ({ host, opponent, status }) => {
+            console.log('Lobby state update:', { host, opponent, status });
+            updateLobbyUI(opponent?.name);
+        });
+
+        socket.on('hostDisconnected', () => {
+            alert('The host has disconnected. Please create a new match.');
+            location.href = 'menu.html';
+        });
+
+        socket.on('opponentDisconnected', () => {
+            alert('The opponent has disconnected. Please create a new match.');
+            location.href = 'menu.html';
+        });
+
+        socket.on('lobbyExpired', () => {
+            alert('The lobby has expired. Please create a new one.');
+            location.href = 'menu.html';
+        });
+
+        function updateLobbyUI(opponentName) {
+            const hostName = localStorage.getItem('playerName');
+            const hostNameElement = document.getElementById('hostName');
+            const opponentNameElement = document.getElementById('opponentName');
+            const opponentStatusElement = document.getElementById('opponentStatus');
+            
+            // Update host name
+            hostNameElement.textContent = hostName;
+            
+            // Update opponent info
+            if (opponentName) {
+                opponentNameElement.textContent = opponentName;
+                opponentStatusElement.textContent = 'Ready';
+            } else {
+                opponentNameElement.textContent = 'Waiting for opponent...';
+                opponentStatusElement.textContent = 'Not joined';
+            }
+        }
+
+        // Initialize the page
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            const code = urlParams.get('code');
+            
+            if (!mode) {
+                location.href = 'menu.html';
+                return;
+            }
+
+            const playerName = localStorage.getItem('playerName');
+            if (!playerName) {
+                location.href = 'menu.html';
+                return;
+            }
+
+            // Set player name
+            document.getElementById('hostName').textContent = playerName;
+            
+            // Join as player first
+            socket.emit('playerJoin', { playerName }, (response) => {
+                if (response.error) {
+                    alert(response.error);
+                    location.href = 'menu.html';
+                    return;
+                }
+                playerId = response.playerId;
+                
+                // After successful player join, handle lobby creation/joining
+                if (mode === 'create') {
+                    // Create lobby
+                    socket.emit('createLobby', (response) => {
+                        if (response.error) {
+                            alert(response.error);
+                            location.href = 'menu.html';
+                            return;
+                        }
+                        lobbyCode = response.lobbyCode;
+                        localStorage.setItem('lobbyCode', lobbyCode);
+                        document.querySelector('.lobby-code-display').textContent = lobbyCode;
+                    });
+                } else if (mode === 'join' && code) {
+                    lobbyCode = code;
+                    document.querySelector('.lobby-code-display').textContent = lobbyCode;
+                    
+                    // Join lobby
+                    socket.emit('joinLobby', { lobbyCode: code }, (response) => {
+                        if (response.error) {
+                            alert(response.error);
+                            location.href = 'menu.html';
+                            return;
+                        }
+                    });
+                }
+            });
+        }
+
+        // Copy lobby code to clipboard
+        function copyLobbyCode() {
+            if (!lobbyCode) {
+                console.error('No lobby code to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(lobbyCode).then(() => {
+                const copyBtn = document.querySelector('.copy-code');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<span class="copy-icon">✓</span> Copied!';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                alert('Failed to copy lobby code. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html> 

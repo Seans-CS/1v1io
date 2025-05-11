@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1v1.io - Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="menu.html" class="home-btn">🏠 Home</a>
+            <div class="profile-icon active">👤</div>
+        </nav>
+
+        <header>
+            <h1 class="title">1v1.io</h1>
+            <p class="subtitle">Your Profile</p>
+        </header>
+
+        <main>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <h2 id="playerName">Player Name</h2>
+                        <p class="player-id">ID: <span id="playerId">-</span></p>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <h3>Match Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value" id="totalMatches">0</span>
+                            <span class="stat-label">Total Matches</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="wins">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="losses">0</span>
+                            <span class="stat-label">Losses</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="winRate">0%</span>
+                            <span class="stat-label">Win Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-container">
+                    <h3>Settings</h3>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <label for="soundToggle">Sound Effects</label>
+                            <input type="checkbox" id="soundToggle" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label for="musicToggle">Background Music</label>
+                            <input type="checkbox" id="musicToggle" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label for="notificationsToggle">Notifications</label>
+                            <input type="checkbox" id="notificationsToggle" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="logout()">Log Out</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+
+        // Load player data
+        window.onload = function() {
+            const playerName = localStorage.getItem('playerName');
+            if (playerName) {
+                document.getElementById('playerName').textContent = playerName;
+            }
+
+            // Load settings from localStorage
+            document.getElementById('soundToggle').checked = localStorage.getItem('soundEnabled') !== 'false';
+            document.getElementById('musicToggle').checked = localStorage.getItem('musicEnabled') !== 'false';
+            document.getElementById('notificationsToggle').checked = localStorage.getItem('notificationsEnabled') !== 'false';
+
+            // Load stats (in a real app, these would come from the server)
+            loadStats();
+        }
+
+        // Handle settings changes
+        document.getElementById('soundToggle').addEventListener('change', function(e) {
+            localStorage.setItem('soundEnabled', e.target.checked);
+        });
+
+        document.getElementById('musicToggle').addEventListener('change', function(e) {
+            localStorage.setItem('musicEnabled', e.target.checked);
+        });
+
+        document.getElementById('notificationsToggle').addEventListener('change', function(e) {
+            localStorage.setItem('notificationsEnabled', e.target.checked);
+        });
+
+        function loadStats() {
+            // In a real app, these would be loaded from the server
+            const stats = {
+                totalMatches: 0,
+                wins: 0,
+                losses: 0
+            };
+
+            document.getElementById('totalMatches').textContent = stats.totalMatches;
+            document.getElementById('wins').textContent = stats.wins;
+            document.getElementById('losses').textContent = stats.losses;
+            document.getElementById('winRate').textContent = 
+                stats.totalMatches > 0 ? Math.round((stats.wins / stats.totalMatches) * 100) + '%' : '0%';
+        }
+
+        function logout() {
+            localStorage.removeItem('playerName');
+            location.href = '/';
+        }
+    </script>
+</body>
+</html> 
